@@ -1,5 +1,7 @@
-import { Separator } from "@heroui/react";
+"use client";
+import { Button, Chip, Separator } from "@heroui/react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { SlCloudDownload } from "react-icons/sl";
@@ -12,8 +14,12 @@ const PhotoCard = ({ data }) => {
           src={data.imageUrl}
           alt={data.title}
           fill
-          className="rounded-lg"
+          sizes="(max-width: 640px) 100vw, 
+         (max-width: 1024px) 50vw, 
+         33vw"
+          className="rounded-xl object-cover"
         />
+        <Chip className="absolute top-2 left-2">{data.category}</Chip>
       </div>
 
       <h2 className="font-medium text-2xl text-[#424242] my-4">{data.title}</h2>
@@ -26,6 +32,11 @@ const PhotoCard = ({ data }) => {
           <SlCloudDownload /> {data.downloads}
         </p>
       </div>
+      <Link href={`/all-photos/${data.id}`}>
+        <Button className="w-full mt-5 bg-gradient-to-r from-purple-500 to-pink-500 font-bold py-3 cursor-pointer">
+          View
+        </Button>
+      </Link>
     </div>
   );
 };

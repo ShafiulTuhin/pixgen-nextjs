@@ -7,11 +7,11 @@ const ShowItems = async () => {
   console.log(aiData);
 
   return (
-    <div className="px-4 lg:px-0 container mx-auto py-10">
-      <h2 className="text-center font-bold text-3xl bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+    <div className="px-bg-gradient-to-r from-pink-500 to-purple-5004 lg:px-0 container mx-auto py-10">
+      <h2 className="text-center font-bold text-3xl  bg-clip-text text-transparent">
         Top Generations
       </h2>
-      <div className="grid grid-cols-3 mt-10 gap-5">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 mt-10 gap-5">
         {aiData.slice(0, 9).map((data) => (
           <PhotoCard key={data.id} data={data} />
         ))}
