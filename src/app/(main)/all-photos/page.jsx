@@ -4,6 +4,11 @@ import { Button } from "@heroui/react";
 import Link from "next/link";
 import React from "react";
 
+export const metadata = {
+  title: "PixGen | All-Photos",
+  description: "",
+};
+
 const AllPhotosPage = async ({ searchParams }) => {
   const { category } = await searchParams;
 
