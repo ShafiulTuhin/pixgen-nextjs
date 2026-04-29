@@ -4,7 +4,6 @@ import PhotoCard from "../shared/PhotoCard";
 
 const ShowItems = async () => {
   const aiData = await getData();
-  console.log(aiData);
 
   return (
     <div className="px-4 lg:px-0 container mx-auto py-10">

@@ -33,7 +33,7 @@ const PhotoCard = ({ data }) => {
         </p>
       </div>
       <Link href={`/all-photos/${data.id}`}>
-        <Button className="w-full mt-5 bg-gradient-to-r from-purple-500 to-pink-500 font-bold py-3 cursor-pointer">
+        <Button className="w-full mt-5 bg-gradient-to-r from-purple-500 to-pink-500 font-bold cursor-pointer py-2">
           View
         </Button>
       </Link>

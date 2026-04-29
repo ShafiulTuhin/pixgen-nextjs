@@ -6,8 +6,14 @@ import { useState } from "react";
 import LogoImg from "@/assets/logo.png";
 import NavLink from "./NavLink";
 import avatar from "@/assets/user.png";
+import { authClient, useSession } from "@/lib/auth-client";
 
 const Navbar = () => {
+  const { data, isPending } = authClient.useSession();
+
+  const user = data?.user;
+  console.log(isPending);
+
   const [isOpen, setIsOpen] = useState(false);
   const border = "border-1 border-gray-400 py-2 rounded-lg";
 
@@ -36,14 +42,36 @@ const Navbar = () => {
         </ul>
 
         {/* Desktop Right */}
-        <div className="hidden md:flex items-center gap-4">
-          <Image src={avatar} alt="User" width={40} height={40} />
-          <Link href="/login">
-            <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg cursor-pointer px-4 py-2">
-              Login
+        {isPending ? (
+          <span className="flex justify-center items-center">Loading...</span>
+        ) : user ? (
+          <div className="hidden md:flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-green-600 font-semibold text-sm">Welcome!</p>
+              <p className="font-bold text-sm">{user?.name}</p>
+            </div>
+            <Image src={user?.image} alt={user?.name} width={40} height={40} />
+
+            <button
+              onClick={async () => {
+                (await authClient.signOut(),
+                  toast.success("Logged out successfully"));
+              }}
+              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg cursor-pointer px-4 py-2"
+            >
+              Logout
             </button>
-          </Link>
-        </div>
+          </div>
+        ) : (
+          <div className="hidden md:flex items-center gap-4">
+            <Image src={avatar} alt="User" width={40} height={40} />
+            <Link href="/login">
+              <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg cursor-pointer px-4 py-2">
+                Login
+              </button>
+            </Link>
+          </div>
+        )}
 
         {/* Mobile Menu Button */}
         <button
@@ -75,13 +103,53 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <div className="flex flex-col gap-3">
+        {/* <div className="flex flex-col gap-3">
           <Image src={avatar} alt="User" width={40} height={40} />
           <Link href="/login">
             <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg w-full py-2">
               Login
             </button>
           </Link>
+        </div> */}
+        <div className="">
+          {isPending ? (
+            <span className="flex justify-center items-center">Loading...</span>
+          ) : user ? (
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <Image
+                  src={user?.image}
+                  alt={user?.name}
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+                <div>
+                  <p className="text-green-600 font-semibold">Welcome!</p>
+                  <p className="font-bold">{user?.name}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={async () => {
+                  (await authClient.signOut(),
+                    toast.success("Logged out successfully"));
+                }}
+                className="btn bg-gradient-to-r from-purple-500 to-pink-500 py-2 text-white rounded-lg w-full"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              <Image src={avatar} alt="User" width={40} height={40} />
+              <Link href="/login">
+                <button className="btn bg-gradient-to-r from-purple-500 to-pink-500 py-2 text-white rounded-lg w-full">
+                  Login
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
