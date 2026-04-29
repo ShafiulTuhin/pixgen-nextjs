@@ -1,6 +1,9 @@
 import SignUp from "@/component/shared/SignUp";
 
-import React from "react";
+export const metadata = {
+  title: "PixGen | Register",
+  description: "An Ai engine to generate on requests",
+};
 
 const RegisterPage = () => {
   return (

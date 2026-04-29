@@ -1,97 +1,128 @@
 "use client";
-import { Check } from "@gravity-ui/icons";
-import {
-  Button,
-  Card,
-  Description,
-  FieldError,
-  Form,
-  Input,
-  Label,
-  TextField,
-} from "@heroui/react";
 
-export const metadata = {
-  title: "PixGen | Register",
-  description: "An Ai engine to generate on requests",
-};
+import { authClient } from "@/lib/auth-client";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
 
-export default function SignUp() {
-  const onSubmit = async (e) => {
-    e.preventDefault();
+const Register = () => {
+  const [isPasswordShow, setIsPasswordShow] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleSubmitForm = async (data) => {
+    const { name, email, password, photo } = data;
+
+    const { data: res, error } = await authClient.signUp.email({
+      name,
+      email,
+      password,
+      image: photo,
+      callbackURL: "/",
+    });
+
+    if (error) {
+      toast.error(error.message);
+    }
+
+    if (res) {
+      toast.success("signUp successfully");
+    }
+
+    console.log(res, error);
   };
 
   return (
-    <Card className="border mx-auto w-125 py-10 mt-5">
-      <h1 className="text-center text-2xl font-bold">Sign Up</h1>
-
-      <Form className="flex w-96 mx-auto flex-col gap-4" onSubmit={onSubmit}>
-        <TextField isRequired name="name" type="text">
-          <Label>Name</Label>
-          <Input placeholder="Enter your name" />
-          <FieldError />
-        </TextField>
-
-        <TextField isRequired name="image" type="text">
-          <Label>Image URL</Label>
-          <Input placeholder="Image URL" />
-          <FieldError />
-        </TextField>
-
-        <TextField
-          isRequired
-          name="email"
-          type="email"
-          validate={(value) => {
-            if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-              return "Please enter a valid email address";
-            }
-
-            return null;
-          }}
+    <div className="bg-slate-200 py-20 px-5">
+      <div className="bg-white lg:w-1/2 mx-auto  py-19 rounded-lg px-3 lg:px-0">
+        <h2 className="mb-5 text-center text-[#403F3F] font-semibold lg:text-[35px] text-2xl">
+          Register your account
+        </h2>
+        <form
+          onSubmit={handleSubmit(handleSubmitForm)}
+          className="lg:w-1/2 mx-auto space-y-4"
         >
-          <Label>Email</Label>
-          <Input placeholder="john@example.com" />
-          <FieldError />
-        </TextField>
-
-        <TextField
-          isRequired
-          minLength={8}
-          name="password"
-          type="password"
-          validate={(value) => {
-            if (value.length < 8) {
-              return "Password must be at least 8 characters";
-            }
-            if (!/[A-Z]/.test(value)) {
-              return "Password must contain at least one uppercase letter";
-            }
-            if (!/[0-9]/.test(value)) {
-              return "Password must contain at least one number";
-            }
-
-            return null;
-          }}
-        >
-          <Label>Password</Label>
-          <Input placeholder="Enter your password" />
-          <Description>
-            Must be at least 8 characters with 1 uppercase and 1 number
-          </Description>
-          <FieldError />
-        </TextField>
-
-        <div className="flex gap-2">
-          <Button type="submit">
-            <Check />
-            Submit
-          </Button>
-          <Button type="reset" variant="secondary">
-            Reset
-          </Button>
-        </div>
-      </Form>
-    </Card>
+          <fieldset className="fieldset ">
+            <legend className="fieldset-legend">Name</legend>
+            <input
+              type="text"
+              className="input  bg-slate-100 w-full"
+              placeholder="John Doe"
+              {...register("name", {
+                required: "Name field cannot be empty",
+              })}
+            />
+            {errors.name && (
+              <p className="text-red-500 font-semibold">
+                {errors.name.message}
+              </p>
+            )}
+          </fieldset>
+          <fieldset className="fieldset ">
+            <legend className="fieldset-legend">Photo Url</legend>
+            <input
+              type="text"
+              className="input  bg-slate-100 w-full"
+              placeholder="Enter photo Url"
+              {...register("photo", {
+                required: "Photo url field cannot be empty",
+              })}
+            />
+            {errors.photo && (
+              <p className="text-red-500 font-semibold">
+                {errors.photo.message}
+              </p>
+            )}
+          </fieldset>
+          <fieldset className="fieldset ">
+            <legend className="fieldset-legend">Email </legend>
+            <input
+              type="email"
+              className="input  bg-slate-100 w-full"
+              placeholder="email@email.com"
+              {...register("email", {
+                required: "Email field cannot be empty",
+              })}
+            />
+            {errors.email && (
+              <p className="text-red-500 font-semibold">
+                {errors.email.message}
+              </p>
+            )}
+          </fieldset>
+          <fieldset className="fieldset relative">
+            <legend className="fieldset-legend">Password</legend>
+            <input
+              type={isPasswordShow ? "text" : "password"}
+              className="input bg-slate-100 w-full"
+              placeholder="Type here"
+              {...register("password", {
+                required: "Password cannot be empty",
+              })}
+            />
+            {errors.password && (
+              <p className="text-red-500 font-semibold">
+                {errors.password.message}
+              </p>
+            )}
+            <span
+              onClick={() => setIsPasswordShow(!isPasswordShow)}
+              className="absolute right-2 top-4 cursor-pointer"
+            >
+              {isPasswordShow ? <FaEye size={20} /> : <FaEyeSlash size={20} />}
+            </span>
+          </fieldset>
+          <button className="btn bg-gradient-to-r from-pink-500 to-purple-500 w-full py-2 rounded-lg cursor-pointer text-white font-semibold">
+            Register
+          </button>
+        </form>
+      </div>
+    </div>
   );
-}
+};
+
+export default Register;

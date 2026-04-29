@@ -1,5 +1,6 @@
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "PixGen",
@@ -17,7 +18,10 @@ export default function RootLayout({ children }) {
       data-theme="light"
       className={`${outfitFont.className}  h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <ToastContainer />
+      </body>
     </html>
   );
 }

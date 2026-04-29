@@ -7,7 +7,7 @@ const ShowItems = async () => {
   console.log(aiData);
 
   return (
-    <div className="px-bg-gradient-to-r from-pink-500 to-purple-5004 lg:px-0 container mx-auto py-10">
+    <div className="px-4 lg:px-0 container mx-auto py-10">
       <h2 className="text-center font-bold text-3xl  bg-clip-text text-transparent">
         Top Generations
       </h2>
