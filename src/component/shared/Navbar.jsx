@@ -7,6 +7,8 @@ import LogoImg from "@/assets/logo.png";
 import NavLink from "./NavLink";
 import avatar from "@/assets/user.png";
 import { authClient, useSession } from "@/lib/auth-client";
+import { Button } from "@heroui/react";
+import { FaGoogle } from "react-icons/fa";
 
 const Navbar = () => {
   const { data, isPending } = authClient.useSession();
@@ -16,6 +18,12 @@ const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const border = "border-1 border-gray-400 py-2 rounded-lg";
+
+  const handleGoogleLogin = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
+  };
 
   return (
     <div className="border-b">
@@ -70,6 +78,13 @@ const Navbar = () => {
                 Login
               </button>
             </Link>
+
+            <Button
+              onClick={handleGoogleLogin}
+              className="bg-gradient-to-r from-purple-500 to-pink-500"
+            >
+              <FaGoogle />
+            </Button>
           </div>
         )}
 
@@ -148,6 +163,13 @@ const Navbar = () => {
                   Login
                 </button>
               </Link>
+              <Button
+                onClick={handleGoogleLogin}
+                className="flex gap-2 bg-gradient-to-r from-purple-500 to-pink-500 py-2 w-full"
+              >
+                <FaGoogle />
+                Login with google
+              </Button>
             </div>
           )}
         </div>
